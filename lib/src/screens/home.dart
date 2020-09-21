@@ -25,16 +25,38 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
     );
   }
 
+  onTap() {
+    if (catController.status == AnimationStatus.completed) {
+      catController.reverse();
+    } else if (catController.status == AnimationStatus.dismissed) {
+      catController.forward();
+    } else if (catController.status == AnimationStatus.forward) {
+      catController.reverse();
+    } else if (catController.status == AnimationStatus.reverse) {
+      catController.forward();
+    }
+  }
+
   Widget build(context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Animation'),
       ),
-      body: buildAnimation(),
+      body: GestureDetector(
+        child: Center(
+          child: Stack(
+            children: [
+              buildCatAnimation(),
+              buildBox(),
+            ],
+          ),
+        ),
+        onTap: onTap,
+      ),
     );
   }
 
-  Widget buildAnimation() {
+  Widget buildCatAnimation() {
     return AnimatedBuilder(
       animation: catAnimation,
       builder: (context, child) {
@@ -44,6 +66,14 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
         );
       },
       child: Cat(),
+    );
+  }
+
+  Widget buildBox() {
+    return Container(
+      height: 200.0,
+      width: 200.0,
+      color: Colors.brown,
     );
   }
 }
